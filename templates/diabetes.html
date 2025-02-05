@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 {% block content %}
+{%if %}
 {% if message %}
     <div class="alert alert-danger">{{ message }}</div>
 {% endif %}
