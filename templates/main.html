@@ -29,7 +29,7 @@
       display: flex; /* Use flexbox for centering content */
       align-items: center; /* Center items vertically */
       justify-content: center; /* Center items horizontally */
-  }    
+    }    
     /* Trick */
     body { 
       display: flex; 
@@ -64,10 +64,12 @@
     <a class="navbar-brand" href="{{ url_for('home') }}">
       <img src="{{ url_for('static', filename='PredictWell.webp') }}" alt="Logo" style='border-radius:50%'>
       𝒫𝓇𝑒𝒹𝒾𝒸𝓉𝒲𝑒𝓁𝓁
-        </a>
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+    </div>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item active">
@@ -82,6 +84,19 @@
         <li class="nav-item active">
           <a class="nav-link" href="{{ url_for('kidneyPage') }}">Kidney</a>
         </li>
+      </ul>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        {% if session.get('logged_in') %}
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('logoutPage') }}">Logout</a>
+          </li>
+        {% else %}
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('loginPage') }}">Login</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </nav>
@@ -104,6 +119,11 @@
         </li>
       </ul>
     </center>
-  </ footer>
+  </footer>
+
+  <script>
+    // You can remove this if not needed
+    // const user = localStorage.getItem('user');
+  </script>
 </body>
 </html>

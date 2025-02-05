@@ -1,32 +1,38 @@
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, session
 import pickle
 import numpy as np
 from PIL import Image
 from tensorflow.keras.models import load_model
-
+from functools import wraps
+import json
+import re
 
 
 app = Flask(__name__)
+app.secret_key = 'predictwell'
+
+# Dummy user storage for demonstration purposes
+users = {}
 
 def predict(values, dic):
     if len(values) == 8:
-        model = pickle.load(open('models/diabetes.pkl','rb'))
+        model = pickle.load(open('models/diabetes.pkl', 'rb'))
         values = np.asarray(values)
         return model.predict(values.reshape(1, -1))[0]
     elif len(values) == 26:
-        model = pickle.load(open('models/breast_cancer.pkl','rb'))
+        model = pickle.load(open('models/breast_cancer.pkl', 'rb'))
         values = np.asarray(values)
         return model.predict(values.reshape(1, -1))[0]
     elif len(values) == 13:
-        model = pickle.load(open('models/heart.pkl','rb'))
+        model = pickle.load(open('models/heart.pkl', 'rb'))
         values = np.asarray(values)
         return model.predict(values.reshape(1, -1))[0]
     elif len(values) == 18:
-        model = pickle.load(open('models/kidney.pkl','rb'))
+        model = pickle.load(open('models/kidney.pkl', 'rb'))
         values = np.asarray(values)
         return model.predict(values.reshape(1, -1))[0]
     elif len(values) == 10:
-        model = pickle.load(open('models/liver.pkl','rb'))
+        model = pickle.load(open('models/liver.pkl', 'rb'))
         values = np.asarray(values)
         return model.predict(values.reshape(1, -1))[0]
 
@@ -34,35 +40,117 @@ def predict(values, dic):
 def home():
     return render_template('home.html')
 
+@app.route("/login", methods=['GET', 'POST'])
+def loginPage():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        # Check if the user exists
+        if email not in users:
+            flash('Email not registered. Please sign up.')
+        else:
+            # Check if the password is correct
+            if users[email]['password'] == password:
+                session['logged_in'] = True
+                session['user_email'] = email
+                return redirect('/')
+            else:
+                flash('Incorrect password. Please try again.')
+
+    return render_template('login.html')
+
+@app.route("/signup", methods=['GET', 'POST'])
+def signupPage():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        # Validate email format
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, email):
+            flash('Invalid email format. Please enter a valid email address.')
+            return render_template('signup.html')
+
+        # Validate password
+        if len(password) < 8:
+            flash('Password must be at least 8 characters long.')
+            return render_template('signup.html')
+        if not re.search(r'[A-Z]', password):
+            flash('Password must contain at least one uppercase letter.')
+            return render_template('signup.html')
+        if not re.search(r'[a-z]', password):
+            flash('Password must contain at least one lowercase letter.')
+            return render_template('signup.html')
+        if not re.search(r'[0-9]', password):
+            flash('Password must contain at least one digit.')
+            return render_template('signup.html')
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+            flash('Password must contain at least one special character.')
+            return render_template('signup.html')
+
+        # Check if the user already exists
+        if email in users:
+            flash('Email already registered. Please log in.')
+        else:
+            # Store user details
+            users[email] = {'password': password}
+            flash('Signup successful! You can now log in.')
+            return redirect('/login')
+
+    return render_template('signup.html')
+
+@app.route("/logout")
+def logoutPage():
+    session.pop('logged_in', None)
+    session.pop('user_email', None)
+    return render_template('logout.html') 
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in' not in session:
+            return redirect('/login')
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route("/diabetes", methods=['GET', 'POST'])
+@login_required
 def diabetesPage():
     return render_template('diabetes.html')
 
 @app.route("/cancer", methods=['GET', 'POST'])
+@login_required
 def cancerPage():
     return render_template('breast_cancer.html')
 
 @app.route("/heart", methods=['GET', 'POST'])
+@login_required
 def heartPage():
     return render_template('heart.html')
 
 @app.route("/kidney", methods=['GET', 'POST'])
+@login_required
 def kidneyPage():
     return render_template('kidney.html')
 
 @app.route("/liver", methods=['GET', 'POST'])
+@login_required
 def liverPage():
     return render_template('liver.html')
 
 @app.route("/malaria", methods=['GET', 'POST'])
+@login_required
 def malariaPage():
     return render_template('malaria.html')
 
 @app.route("/pneumonia", methods=['GET', 'POST'])
+@login_required
 def pneumoniaPage():
     return render_template('pneumonia.html')
 
-@app.route("/predict", methods = ['POST', 'GET'])
+@app.route("/predict", methods=['POST', 'GET'])
+@login_required
 def predictPage():
     pred = None
     try:
@@ -72,43 +160,44 @@ def predictPage():
             pred = predict(to_predict_list, to_predict_dict)
     except:
         message = "Please enter valid Data"
-        # return render_template("home.html", message = message)
 
-    return render_template('predict.html', pred = pred)
+    return render_template('predict.html', pred=pred)
 
-@app.route("/malariapredict", methods = ['POST', 'GET'])
+@app.route("/malariapredict", methods=['POST', 'GET'])
+@login_required
 def malariapredictPage():
     if request.method == 'POST':
         try:
             if 'image' in request.files:
                 img = Image.open(request.files['image'])
-                img = img.resize((36,36))
+                img = img.resize((36, 36))
                 img = np.asarray(img)
-                img = img.reshape((1,36,36,3))
+                img = img.reshape((1, 36, 36, 3))
                 img = img.astype(np.float64)
                 model = load_model("models/malaria.h5")
                 pred = np.argmax(model.predict(img)[0])
         except:
             message = "Please upload an Image"
-            return render_template('malaria.html', message = message)
-    return render_template('malaria_predict.html', pred = pred)
+            return render_template('malaria.html', message=message)
+    return render_template('malaria_predict.html', pred=pred)
 
-@app.route("/pneumoniapredict", methods = ['POST', 'GET'])
+@app.route("/pneumoniapredict", methods=['POST', 'GET'])
+@login_required
 def pneumoniapredictPage():
     if request.method == 'POST':
         try:
             if 'image' in request.files:
                 img = Image.open(request.files['image']).convert('L')
-                img = img.resize((36,36))
+                img = img.resize((36, 36))
                 img = np.asarray(img)
-                img = img.reshape((1,36,36,1))
+                img = img.reshape((1, 36, 36, 1))
                 img = img / 255.0
                 model = load_model("models/pneumonia.h5")
                 pred = np.argmax(model.predict(img)[0])
         except:
             message = "Please upload an Image"
-            return render_template('pneumonia.html', message = message)
-    return render_template('pneumonia_predict.html', pred = pred)
+            return render_template('pneumonia.html', message=message)
+    return render_template('pneumonia_predict.html', pred=pred)
 
 if __name__ == '__main__':
-	app.run(debug = True)
+    app.run(debug=True)
