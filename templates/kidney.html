@@ -1,0 +1,119 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<div class="container" style=" padding: 20px; border-radius: 10px;">
+    <div class="row justify-content-center" style="margin-bottom: 125px;">
+        <div class="col-12 col-md-8">
+            <center><h1>Kidney Disease Predictor</h1></center>
+            <div class="card card-body" style="background-color: #d8dbde; border: none; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                <form class="form-horizontal" action="{{ url_for('predictPage') }}" method="POST">
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="age" placeholder="Age" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="bp" placeholder="Blood Pressure" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="al" placeholder="Albumin" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="su" placeholder="Sugar" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="rbc" placeholder="Red Blood Cells" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="pc" placeholder="Pus Cell" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="pcc" placeholder="Pus Cell Clumps" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="ba" placeholder="Bacteria" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="bgr" placeholder="Blood Glucose Random" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="bu" placeholder="Blood Urea" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="sc" placeholder="Serum Creatinine" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="pot" placeholder="Potassium" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="wc" placeholder="White Cell Count" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="htn" placeholder="Hypertension" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="dm" placeholder="Diabetes Mellitus" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="cad" placeholder="Coronary Artery Disease" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="pe" placeholder="Pedal Edema" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="ane" placeholder="Anemia" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn" value="Predict" style="background-color: rgb(17,162,156); color: white; border-radius: 5px; border: none; width: auto; padding: 10px;float:right;">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

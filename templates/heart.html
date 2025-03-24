@@ -1,0 +1,95 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center" style="margin-bottom: 175px;">
+        <div class="col-12 col-md-12">
+            <center><h1>Heart Disease Predictor</h1></center>
+            <div class="card card-body" style="background-color: #d8dbde; border: none; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                <form class="form-horizontal" action="{{ url_for('predictPage') }}" method="POST">
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="age" placeholder="Age" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="sex" placeholder="Sex (Male: 1, Female: 0)" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="cp" placeholder="Chest Pain Type" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="trestbps" placeholder="Resting Blood Pressure (mm Hg)" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="chol" placeholder="Serum Cholesterol (mg/dl)" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="fbs" placeholder="Fasting Blood Sugar (1 = true; 0 = false)" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="restecg" placeholder="Resting Electrocardiographic Results" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="thalach" placeholder="Maximum Heart Rate Achieved" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="exang" placeholder="Exercise Induced Angina (1 = yes; 0 = no)" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="oldpeak" placeholder="ST Depression Induced by Exercise" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="slope" placeholder="Slope of the Peak Exercise ST Segment" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="ca" placeholder="Number of Major Vessels (0-3)" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <input class="form-control shadow-sm" type="text" name="thal" placeholder="3 = Normal; 6 = Fixed Defect; 7 = Reversible Defect" style="border: none; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-4"></div>
+                    </div>
+                    <input type="submit" class="btn " value="Predict" style="background-color: rgb(17,162,156); color: white; border-radius: 5px; border: none; width: auto; padding: 10px; margin:auto; float:right;">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
